@@ -276,6 +276,18 @@ function Badge({ text }) {
 
 function LabeledInput({ label, value, onChange, min = 0, step = 1, addon = null }) {
   const [focused, setFocused] = useState(false)
+
+  const handleChange = (e) => {
+    let val = e.target.value
+
+    // Если поле было "0" и человек начал вводить цифру → стираем старый ноль
+    if (value === "0" && val.length > 1 && val.startsWith("0")) {
+      val = val.slice(1)
+    }
+
+    onChange(val)
+  }
+
   return (
     <label className="group block">
       <div className="mb-1 flex items-center justify-between text-sm opacity-70">
@@ -287,10 +299,18 @@ function LabeledInput({ label, value, onChange, min = 0, step = 1, addon = null 
         inputMode="decimal"
         min={min}
         step={step}
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        onFocus={() => setFocused(true)}
-        onBlur={() => setFocused(false)}
+        value={value === "" ? "0" : value}
+        onChange={handleChange}
+        onFocus={() => {
+          setFocused(true)
+          // если в поле "0", при фокусе очищаем
+          if (value === "0") onChange("")
+        }}
+        onBlur={() => {
+          setFocused(false)
+          // если поле пустое после ухода — возвращаем "0"
+          if (value === "") onChange("0")
+        }}
         className="w-full rounded-2xl border border-neutral-200/70 bg-transparent px-4 py-3 text-base outline-none transition placeholder:opacity-40 focus:border-transparent dark:border-neutral-800"
         style={{ boxShadow: focused ? `0 0 0 2px var(--accent)` : undefined }}
         placeholder="0"
@@ -299,11 +319,3 @@ function LabeledInput({ label, value, onChange, min = 0, step = 1, addon = null 
   )
 }
 
-function InfoRow({ label, value, subtle = true }) {
-  return (
-    <div className="flex items-center justify-between rounded-2xl border border-neutral-200/60 bg-neutral-50/60 px-4 py-3 text-sm dark:border-neutral-800 dark:bg-neutral-800/40">
-      <span className={`${subtle ? '' : 'font-medium opacity-90'} opacity-70`}>{label}</span>
-      <span className="font-semibold tracking-tight">{value}</span>
-    </div>
-  )
-}
