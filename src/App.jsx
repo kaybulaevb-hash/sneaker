@@ -274,33 +274,36 @@ function Badge({ text }) {
   )
 }
 
-function LabeledInput({ label, value, onChange, addon=null }) {
+function LabeledInput({ label, value, onChange, min = 0, step = 1, addon = null }) {
   const [focused, setFocused] = useState(false)
-  const handleChange = (e) => {
-    let val = e.target.value
-    // убираем ведущие нули
-    if (val.length > 1 && val.startsWith("0")) {
-      val = val.replace(/^0+/, "")
-      if (val === "") val = "0"
-    }
-    onChange(val)
-  }
   return (
-    <label className="block">
-      <div className="mb-1 flex justify-between text-sm opacity-70">
+    <label className="group block">
+      <div className="mb-1 flex items-center justify-between text-sm opacity-70">
         <span>{label}</span>
         {addon}
       </div>
       <input
         type="number"
-        value={value}
-        onChange={handleChange}
-        onFocus={() => {setFocused(true); if(value==="0") onChange("")}}
-        onBlur={() => {setFocused(false); if(value==="") onChange("0")}}
-        className="w-full rounded-2xl border border-neutral-200 bg-white px-4 py-3 text-neutral-900 shadow-sm transition 
-                   placeholder:text-neutral-400 focus:border-[var(--accent)] focus:ring-2 focus:ring-[var(--accent)] 
-                   dark:border-neutral-800 dark:bg-neutral-900 dark:text-neutral-100"
+        inputMode="decimal"
+        min={min}
+        step={step}
+        value={Number.isFinite(value) ? value : 0}
+        onChange={(e) => onChange(Number(e.target.value))}
+        onFocus={() => setFocused(true)}
+        onBlur={() => setFocused(false)}
+        className="w-full rounded-2xl border border-neutral-200/70 bg-transparent px-4 py-3 text-base outline-none transition placeholder:opacity-40 focus:border-transparent dark:border-neutral-800"
+        style={{ boxShadow: focused ? `0 0 0 2px var(--accent)` : undefined }}
+        placeholder="0"
       />
     </label>
+  )
+}
+
+function InfoRow({ label, value, subtle = true }) {
+  return (
+    <div className="flex items-center justify-between rounded-2xl border border-neutral-200/60 bg-neutral-50/60 px-4 py-3 text-sm dark:border-neutral-800 dark:bg-neutral-800/40">
+      <span className={`${subtle ? '' : 'font-medium opacity-90'} opacity-70`}>{label}</span>
+      <span className="font-semibold tracking-tight">{value}</span>
+    </div>
   )
 }
