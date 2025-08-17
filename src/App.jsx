@@ -117,7 +117,7 @@ export default function App() {
           <div className="mx-auto flex max-w-5xl items-center justify-between gap-4 px-4 py-4">
             <div className="flex items-center gap-3">
               <span className="inline-block h-3 w-3 rounded-full" style={{ background: accentHex }} />
-              <h1 className="text-xl font-semibold tracking-tight sm:text-2xl">Sneaker Price Calculator</h1>
+              <h1 className="text-xl font-semibold tracking-tight sm:text-2xl">Onmyfeet Price Calculator</h1>
             </div>
 
             <div className="flex items-center gap-2">
