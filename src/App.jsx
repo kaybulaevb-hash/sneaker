@@ -258,14 +258,6 @@ export default function App() {
           )}
         </AnimatePresence>
 
-        <footer className="mx-auto max-w-5xl px-4 pb-8 pt-4 text-xs opacity-70">
-          Сделано на React + TailwindCSS + Framer Motion. Готово к деплою на Vercel / Netlify.
-        </footer>
-      </div>
-    </div>
-  )
-}
-
 function Badge({ text }) {
   return (
     <span className="shrink-0 rounded-full border px-2 py-1 text-xs opacity-80" title="Эквивалент наценки в процентах">
